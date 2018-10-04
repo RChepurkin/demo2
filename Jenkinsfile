@@ -1,21 +1,11 @@
 pipeline {
-    agent none
-    stage('Test') {
-        parallel linux: {
-            node('linux') {
-                checkout scm
-                try {
-                    unstash 'app'
-                    sh 'make check'
-                }
-                finally {
-                    junit '**/target/*.xml'
-                }
-            }
-        },
-        windows: {
-            node('windows') {
-                /* .. snip .. */
+    agent {
+        docker { image 'node:7-alpine' }
+    }
+    stages {
+        stage('Test') {
+            steps {
+                sh 'node --version'
             }
         }
     }
