@@ -2,16 +2,13 @@ pipeline {
     agent {
       label "jenkins-maven"
     }
-    environment {
-        CC = 'clang'
+    parameters {
+        string(name: 'Greeting', defaultValue: 'Hello', description: 'How should I greet the world?')
     }
     stages {
         stage('Example') {
-            environment {
-                DEBUG_FLAGS = '-g'
-            }
             steps {
-                sh 'printenv'
+                echo "${params.Greeting} World!"
             }
         }
     }
