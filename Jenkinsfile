@@ -2,7 +2,9 @@ pipeline {
     agent none
     stages {
         stage('Build') {
-            agent any
+            agent {
+                label 'jenkins-jx-base'
+            }
             steps {
                 checkout scm
                 sh 'make'
