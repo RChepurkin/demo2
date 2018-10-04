@@ -1,28 +1,21 @@
 pipeline {
     agent none
-    stages {
-        stage('Build') {
-            agent {
-                label 'jenkins-jx-base'
+    stage('Test') {
+        parallel linux: {
+            node('linux') {
+                checkout scm
+                try {
+                    unstash 'app'
+                    sh 'make check'
+                }
+                finally {
+                    junit '**/target/*.xml'
+                }
             }
-            steps {
-                echo 'Build..'
-            }
-        }
-        stage('Test on Linux') {
-            agent {
-                label 'jenkins-terraform'
-            }
-            steps {
-                echo 'Test on Linux..'
-            }
-        }
-        stage('Test on Windows') {
-            agent {
-                label 'jenkins-maven'
-            }
-            steps {
-                echo 'Test on Windows..'
+        },
+        windows: {
+            node('windows') {
+                /* .. snip .. */
             }
         }
     }
