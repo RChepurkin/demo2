@@ -6,9 +6,7 @@ pipeline {
                 label 'jenkins-jx-base'
             }
             steps {
-                checkout scm
-                sh 'make'
-                stash includes: '**/target/*.jar', name: 'app'
+                echo 'Build..'
             }
         }
         stage('Test on Linux') {
@@ -16,13 +14,7 @@ pipeline {
                 label 'jenkins-terraform'
             }
             steps {
-                unstash 'app'
-                sh 'make check'
-            }
-            post {
-                always {
-                    junit '**/target/*.xml'
-                }
+                echo 'Test on Linux..'
             }
         }
         stage('Test on Windows') {
@@ -30,13 +22,7 @@ pipeline {
                 label 'jenkins-maven'
             }
             steps {
-                unstash 'app'
-                bat 'make check'
-            }
-            post {
-                always {
-                    junit '**/target/*.xml'
-                }
+                echo 'Test on Windows..'
             }
         }
     }
